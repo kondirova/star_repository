@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Artifact Search</title>
+</head>
+<body>
+<h1>Found Artifacts</h1>
+<table border="1">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Artifact Path</th>
+        <th>Download</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="artifact, iterStat : ${artifacts}">
+        <td th:text="${iterStat.count}"></td>
+        <td th:text="${artifact}"></td>
+        <td>
+            <a th:href="@{'/repository/' + ${artifact}}" target="_blank">Download</a>
+        </td>
+    </tr>
+    </tbody>
+</table>
+</body>
+</html>

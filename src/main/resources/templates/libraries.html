@@ -1,0 +1,13 @@
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Library Repository</title>
+</head>
+<body>
+<h1>Available Libraries</h1>
+<ul>
+    <li th:each="library : ${libraries}">
+        <a th:href="@{'/repository/' + ${library}}" th:text="${library}"></a>
+    </li>
+</ul>
+</body>
+</html>

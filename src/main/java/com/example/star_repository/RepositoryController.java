@@ -5,6 +5,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.File;
@@ -15,16 +16,21 @@ import java.io.InputStream;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 
 public class RepositoryController {
 
-    private static final String REPOSITORY_PATH = "repository/";
+//    private static final String REPOSITORY_PATH = "repository/";
+    private static final String REPOSITORY_PATH = "/Users/Sofia.Kondirova/.m2/stars_artefacts/";
 
     //Download an artifact from the repository
-    @GetMapping("repository/{*fullPath}")
+   @GetMapping("repository/{*fullPath}")
+//    @GetMapping("/Users/Sofia.Kondirova/.m2/stars_artefacts")
     public ResponseEntity<Resource> downloadByGAV(
             @PathVariable String fullPath
 
@@ -72,6 +78,23 @@ public class RepositoryController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error uploading file: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/libraries")
+    public String getLibraries(Model model) {
+        File repoDir = new File(REPOSITORY_PATH);
+        if (!repoDir.exists() || !repoDir.isDirectory()) {
+            model.addAttribute("libraries", new ArrayList<>());
+            return "libraries";
+        }
+
+        List<String> libraries = Arrays.stream(repoDir.listFiles())
+                .filter(File::isFile)
+                .map(File::getName)
+                .collect(Collectors.toList());
+
+        model.addAttribute("libraries", libraries);
+        return "libraries";
     }
 
 }
